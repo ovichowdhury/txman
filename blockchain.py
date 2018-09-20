@@ -51,6 +51,34 @@ class Blockchain :
                     elif tx["sender"] == sender:
                         balance -= tx["amount"]
         return balance
+
+    # for generating ledger of any account
+    def generate_ledger(self, chain_list, user):
+        balance = 0
+        total_credit = 0
+        total_debit = 0
+        credit = []
+        debit = []
+        for block in chain_list:
+            if len(block["transactions"]) > 0:
+                for tx in block["transactions"]:
+                    if tx["receiver"] == user :
+                        balance += tx["amount"]
+                        total_credit += tx["amount"]
+                        credit.append(tx)
+                    elif tx["sender"] == user:
+                        balance -= tx["amount"]
+                        total_debit += tx["amount"]
+                        debit.append(tx)
+        ledger = {
+            "credits" : credit,
+            "debits" : debit,
+            "total_credit" : total_credit,
+            "total_debit" : total_debit,
+            "balance" : balance
+        }
+        return ledger
+
     
     # for hashing a block
     def hasher(self, g):

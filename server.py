@@ -150,6 +150,7 @@ def add_transaction():
     except Exception as ex:
         return jsonify({"status" : "Exception occured", "message" : f"Request can not be parsed or {str(ex)}"}), 500
 
+# for calculating balance of any user
 @app.route('/calculate_balance', methods=['POST'])
 def calculate_balance():
     try:
@@ -157,6 +158,18 @@ def calculate_balance():
         name = data["name"]
         balance = block_chain.calculate_balance(list(block_chain.blockchain.find()),name)
         return jsonify({"balance" : balance , "name" : name}), 200
+    except Exception:
+        return jsonify({"status" : "Exception occured", "message" : "Request can not be parsed or database server down"}), 500
+
+
+# for getting the ledger of any account
+@app.route('/generate_ledger', methods=['POST'])
+def generate_ledger():
+    try:
+        data = request.get_json()
+        name = data["name"]
+        ledger = block_chain.generate_ledger(list(block_chain.blockchain.find()),name)
+        return jsonify({"name" : name, "ledger" : ledger}), 200
     except Exception:
         return jsonify({"status" : "Exception occured", "message" : "Request can not be parsed or database server down"}), 500
 
