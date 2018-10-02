@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Transaction</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script>
+    $(document).ready(()=>{
+
+      $("#add-btn").click(function(){
+          var formData = {
+              sender : document.getElementById("sender").value,
+              receiver : document.getElementById("receiver").value,
+              amount : document.getElementById("amount").value,
+          }
+
+          $.ajax({
+              url:"http://127.0.0.1:5000/add_transaction",
+              data:JSON.stringify(formData),
+              dataType:"json",
+              type:"POST",
+              contentType:"application/json; charset=utf-8",
+              success:function(data){
+                  console.log(data);
+                  alert(data.status);
+              },
+              error: function(err){
+                  console.log(err);
+              },
+              timeout : 8000
+              
+          })
+      });
+
+
+
+    })
+  </script>
+
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Blockchain Demo</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="addtx.html">Add Transaction</a></li>
+        <li><a href="ledger.html">Ledger</a></li>
+        <li><a href="showchain.html">Show Blockchain</a></li>
+        <li><a href="shownode.html">Show Node</a></li>
+        <li><a href="addnode.html">Add Node</a></li>
+      </ul>
+    </div>
+  </nav>
+
+<div class="container">
+  <div class="jumbotron">
+    <h1>ADD Transaction</h1>      
+    <div class="container">
+        <h2>Transaction Form</h2>
+        <form >
+          <div class="form-group">
+            <label for="sender">Sender:</label>
+            <input type="text" class="form-control" id="sender" placeholder="Sender Name" name="sender">
+          </div>
+          <div class="form-group">
+            <label for="receiver">Receiver:</label>
+            <input type="text" class="form-control" id="receiver" placeholder="Receiver Name" name="receiver">
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="text" class="form-control" id="amount" placeholder="Amount" name="amount">
+          </div>
+         
+          <button type="button" class="btn btn-info" id="add-btn">ADD</button>
+        </form>
+      </div>     
+</div>
+
+
+</body>
+</html>

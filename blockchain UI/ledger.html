@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Show Ledger</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script> 
+    $(document).ready(function(){
+      
+      function showResult(data){
+          var resultHTML = `
+            <ul>
+              <li>Name : ${data.name} </li>
+              <li>balance : ${data.ledger.balance} </li>
+              <li>Total Credit : ${data.ledger.total_credit} </li>
+              <li>Total Debit : ${data.ledger.total_debit} </li>
+              <li>Credits : 
+                <ol>
+                  ${
+                    data.ledger.credits.map(tx => `
+                      <li> ${tx.sender +" to " +tx.receiver + " => " + tx.amount}</li>
+                    ` 
+                    )}
+                </ol>
+              </li>
+              <li>Debits : 
+                <ol>
+                  ${
+                    data.ledger.debits.map(tx => `
+                      <li> ${tx.sender +" to " +tx.receiver + " => " + tx.amount}</li>
+                    ` 
+                    )}
+                </ol>
+              </li>
+            </ul>
+          `;
+          document.getElementById("ledger-container").innerHTML = resultHTML;
+      }
+
+      $("#search_button").click(function(){
+          var name={
+              name:document.getElementById("search").value
+          }
+          console.log("in click");
+          console.log(name);
+          $.ajax({
+              url:"http://127.0.0.1:5000/generate_ledger",
+              data:JSON.stringify(name),
+              dataType:"json",
+              type:"POST",
+              contentType:"application/json; charset=utf-8",
+              success:function(data){
+                  console.log(data);
+                  showResult(data);
+              },
+              error: function(err){
+                  console.log(err);
+              }
+              
+          })
+      });
+    });
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Blockchain Demo</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="addtx.html">Add Transaction</a></li>
+        <li><a href="ledger.html">Ledger</a></li>
+        <li><a href="showchain.html">Show Blockchain</a></li>
+        <li><a href="shownode.html">Show Node</a></li>
+        <li><a href="addnode.html">Add Node</a></li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <div class="container">
+        <div class="jumbotron">
+          <h1>Search Ledger</h1>      
+          <div class="container">
+
+              <form>
+                <div class="form-group">
+                  <label for="search">Name:</label>
+                  <input type="text" class="form-control" id="search"  name="search">
+                </div>
+               
+                <button type="button" id="search_button" class="btn btn-info">search</button>
+              </form>
+            </div>
+            <br>
+            <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Ledger</h3></div>
+                      <div class="panel-body" id="ledger-container">
+
+                      </div>
+            </div>     
+      </div>
+
+ 
+
+
+</body>
+</html>

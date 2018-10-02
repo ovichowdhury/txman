@@ -3,6 +3,7 @@ from blockchain import Blockchain
 from node import Nodes
 from urllib.parse import urlparse
 import requests
+from flask_cors import CORS
 #import json
 
 # initialization of all the required object
@@ -15,6 +16,10 @@ nodes = Nodes()
 
 # creating a flask app
 app = Flask(__name__)
+
+# enabling cors 
+CORS(app)
+
 # preventing jsonify of flask from sorting json keys
 app.config['JSON_SORT_KEYS'] = False
 
